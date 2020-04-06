@@ -120,7 +120,7 @@ If our project is helpful for your research, please consider citing :
 </table>
 </p>
 
-**Other results (such as: aligning duplicated artworks, optical flow, localization etc.) can be seen in [our paper](paper_link).**
+**Other results (such as: aligning duplicated artworks, optical flow, localization etc.) can be seen in [our paper](http://imagine.enpc.fr/~shenx/RANSAC-Flow/RANSAC_Flow.pdf).**
  
 ## 2. Installation
 
