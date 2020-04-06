@@ -1,0 +1,1 @@
+python train.py --nEpochs 200 --lr 2e-4 --trainImgDir ../data/MegaDepth/MegaDepth_Train --kernelSize 7 --imgSize 224 --batchSize 16 --outDir MegaDepth_Stage1 --eta 0.0 --theta 0.0 --grad 0.0  --trainMode flow --margin 88 --LrLoss SSIM valMegaDepth --valImgDir ../data/MegaDepth/Val/img/ --valCSV ../data/MegaDepth/Val/corr.csv --inPklCoarse ../data/MegaDepth/Val/coarse.pkl
