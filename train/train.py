@@ -405,7 +405,7 @@ if __name__ == '__main__':
     if args.trainMode == 'grad-match' : 
         print ('Train grad loss but without matchability loss...')
     
-    if 'NEED_TO_UPLOAD_CHECKPOINT' in args.resumePth : 
+    if args.resumePth is not None and 'NEED_TO_UPLOAD_CHECKPOINT' in args.resumePth : 
         print (args.resumePth)
         raise RuntimeError('{}'.format(args.resumePth.replace('_', ' '))) 
 
