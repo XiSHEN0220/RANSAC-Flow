@@ -65,7 +65,7 @@ If our project is helpful for your research, please consider citing :
 </table>
 </p>
 
-### 1.2. 3D recontruction (More results can be found in our [project webpage](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
+### 1.2. 3D recontruction 2-view geometry estimation (More results can be found in our [project webpage](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
 
 <p align="center">
 <table>
