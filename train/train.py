@@ -20,7 +20,7 @@ import model.model as model
 import model.ssimLoss as ssimLoss
 
 import data.dataloader as dataloader
-import utils.monitor as monitor
+#import utils.monitor as monitor # easy to support monitor
 import validation
 
 import ssimLoss
@@ -36,7 +36,7 @@ def computeLossMatchability(network, I, indexRoll, grid, maskMargin, args, ssim,
     
     finalGrad, final = model.predFlowCoarse(corr, network['netFlowCoarse'], grid)
     
-    #corr = corr.detach()       
+    #corr = corr.dlambda_matchch()       
     match = model.predMatchability(corr, network['netMatch']) * maskMargin 
     
     matchCycle = F.grid_sample(match[indexRoll], final) * match
@@ -61,7 +61,7 @@ def computeLossMatchability(network, I, indexRoll, grid, maskMargin, args, ssim,
     lossGrad = torch.sum(finalGrad * (1 - matchCycle[:, :, :-1, :-1]) * maskMargin[:, :, :-1, :-1]) / (torch.sum((1 - matchCycle[:, :, :-1, :-1]) * maskMargin[:, :, :-1, :-1]) + 0.001) 
     
     #lossGrad = torch.mean(finalGrad)
-    loss = lossLr  + args.theta * lossCycle + args.eta * lossMatch + args.grad * lossGrad 
+    loss = lossLr  + args.mu_cycle * lossCycle + args.lambda_match * lossMatch + args.grad * lossGrad 
     return lossLr.item(), lossCycle.item(), lossMatch.item(), lossGrad.item(), loss      
     
 
@@ -85,7 +85,7 @@ def computeLossNoMatchability(network, I, indexRoll, grid, maskMargin, args, ssi
     
     ## matchability loss
     
-    loss = lossLr  + args.theta * lossCycle 
+    loss = lossLr  + args.mu_cycle * lossCycle 
     
     return lossLr.item(), lossCycle.item(), 0, 0, loss  
     
@@ -109,7 +109,7 @@ def computeGradLossNoMatchability(network, I, indexRoll, grid, maskMargin, args,
     lossGrad = torch.sum(finalGrad * maskMargin[:, :, :-1, :-1]) / (torch.sum( maskMargin[:, :, :-1, :-1] ) + 0.001) 
     ## matchability loss
     
-    loss = lossLr  + args.theta * lossCycle + args.grad * lossGrad
+    loss = lossLr  + args.mu_cycle * lossCycle + args.grad * lossGrad
     
     return lossLr.item(), lossCycle.item(), 0, lossGrad, loss       
       
@@ -120,7 +120,7 @@ def run(args) :
 
     torch.backends.cudnn.benchmark = True
     ## Visom Visualization
-    logger = monitor.Logger(args.outDir)
+    #logger = monitor.Logger(args.outDir)
       
 
     # Define Networks
@@ -149,7 +149,7 @@ def run(args) :
                 print ('{} and {} weight not compatible...'.format(key, key)) 
     
     # Optimizers & LR schedulers
-    
+    ## only learn the flow, stage 1 and 2
     if args.trainMode == 'flow' : 
         optimizer     = [torch.optim.Adam(itertools.chain(*[network['netFeatCoarse'].parameters(), 
                                                            network['netCorr'].parameters(),
@@ -158,6 +158,7 @@ def run(args) :
         LossFunction = computeLossNoMatchability
         trainModule = ['netFeatCoarse', 'netCorr', 'netFlowCoarse']
     
+    ## learn jointly the flow and match, final stage
     if args.trainMode == 'flow+match' : 
         optimizer     = [torch.optim.Adam(itertools.chain(*[network['netFeatCoarse'].parameters(), 
                                                            network['netCorr'].parameters(),
@@ -167,23 +168,14 @@ def run(args) :
         LossFunction = computeLossMatchability
         trainModule = ['netFeatCoarse', 'netCorr', 'netFlowCoarse', 'netMatch']
     
-    if args.trainMode == 'match' : 
+    ## smoothing the flow, for the visual results, introduce less distortions (with args.grad > 0)
+    if args.trainMode == 'grad' : 
     
         optimizer     = [torch.optim.Adam(itertools.chain(*[network['netFlowCoarse'].parameters()]), lr=args.lr, betas=(0.5, 0.999))]
         
         LossFunction = computeLossMatchability
         trainModule = ['netFlowCoarse']
-        
-    if args.trainMode == 'grad-match' : 
-    
-        optimizer     = [torch.optim.Adam(itertools.chain(*[network['netFeatCoarse'].parameters(), 
-                                                           network['netCorr'].parameters(),
-                                                           network['netFlowCoarse'].parameters()]), lr=args.lr, betas=(0.5, 0.999))]
-        
-        LossFunction = computeGradLossNoMatchability
-        trainModule = ['netFeatCoarse', 'netCorr', 'netFlowCoarse']
-    
-    
+     
     
         
     
@@ -191,19 +183,10 @@ def run(args) :
     maskMargin = torch.ones(args.batchSize * 2, 1, args.imgSize - 2 * args.margin, args.imgSize - 2 * args.margin).type(typeData)
     maskMargin = F.pad(maskMargin, (args.margin, args.margin, args.margin, args.margin), "constant", 0)
     
-    ## Pixel shift loss of standard L1 loss, pixel shift loss can be used to handle the change of light condition
-    if args.LrLoss == 'L1':  
-        ssim = None
-        if args.trainPixelShift : 
-            LrLoss = model.L1PixelShift
-        else : 
-            LrLoss = model.L1PixelWise
-    else : 
-        ssim =  ssimLoss.SSIM()
-        if args.trainPixelShift : 
-            LrLoss = model.SSIMPixelShift
-        else : 
-            LrLoss = model.SSIM
+    
+    ## SSIM Loss
+    ssim =  ssimLoss.SSIM()
+    LrLoss = model.SSIM
     
 
     if not os.path.exists(args.outDir) :
@@ -211,8 +194,6 @@ def run(args) :
     outNet = os.path.join(args.outDir, 'BestModel.pth')
     
     # Train data loader
-    
-                                     
     trainT = dataloader.trainTransform
     
     trainLoader = dataloader.TrainDataLoader(args.trainImgDir, trainT, args.batchSize, args.imgSize)
@@ -248,7 +229,6 @@ def run(args) :
         trainLossLr = 0
         trainLossCycle = 0
         trainLossMatch = 0
-        trainLossMatchCycle = 0
         trainLossGrad = 0
         
         ## switch related module to train
@@ -286,7 +266,7 @@ def run(args) :
                 print (msg)
 
 
-        
+        ## if some annotations are available, use them to validate models, otherwise use reconstruction loss
         if df is not None: 
             precFine = validation.validation(df, args.valImgDir, inPklCoarse, network, args.trainMode)
         else : 
@@ -304,7 +284,7 @@ def run(args) :
         msg = '\n{} Last Update {:d}---> Epoch {:d}, Train Lr Loss : {:.9f}, Train Cycle Loss : {:.9f}, Train Match Loss : {:.9f}, Train Grad Loss : {:.9f}, valPrec@8 : {:.9f} (Best {:.9f})-----'.format(time.ctime(), LastUpdate, epoch, trainLossLr, trainLossCycle, trainLossMatch, trainLossGrad, precFine[4], bestPrec)
         print (msg)
         
-        valPrecEpoch = precFine[3] if 'fine' in args.trainMode else precFine[4]
+        valPrecEpoch = precFine[4]
         
         if df is not None and valPrecEpoch > bestPrec :
             msg = '\n{}\t---> Epoch {:d}, VAL Prec@8 IMPROVED: {:.9f} -- > {:.9f}-----'.format(time.ctime(), epoch, bestPrec, valPrecEpoch)
@@ -342,7 +322,6 @@ if __name__ == '__main__':
     
     parser.add_argument('--trainImgDir', type=str, default = '../data/MegaDepth/MegaDepth_Train/', help='RGB train image directory')
     
-    
     parser.add_argument('--kernelSize', type=int, default = 7, help='Kernel Size coarse')
     
     parser.add_argument('--imgSize', type=int, default = 224, help='image Size')
@@ -352,18 +331,16 @@ if __name__ == '__main__':
     parser.add_argument('--outDir', type=str, help='output model directory')
     parser.add_argument('--resumePth', type=str, help='Resume directory')
     
-    parser.add_argument('--eta', type=float, default=0.01, help='matchability loss')
-    parser.add_argument('--theta', type=float, default=1.0, help='weight for cycle distance')
+    parser.add_argument('--lambda-match', type=float, default=0.01, help='matchability loss')
+    
+    parser.add_argument('--mu-cycle', type=float, default=1.0, help='weight for cycle distance')
+    
     parser.add_argument('--grad', type=float, default=1, help='weight for cycle distance')
     
-    parser.add_argument('--trainMode', choices=['flow', 'flow+match', 'match', 'full'], help='choosing module for training...')
+    parser.add_argument('--trainMode', choices=['flow', 'flow+match', 'grad'], help='choosing module for training...')
     
-    parser.add_argument('--trainPixelShift', action='store_true', help='using pixel shift to calculate L1 loss, if activate, train with pixel shift loss')
+    parser.add_argument('--margin', type=int, default = 88, help='margin size, only training the central patch, in order to get rid of border effect')
     
-    parser.add_argument('--margin', type=int, default = 88, help='margin size')
-    
-    parser.add_argument('--LrLoss', type=str, default = 'SSIM', choices = ['L1', 'SSIM'], help='Reconstruction Loss, L1 loss or SSIM Loss')
-
     subparsers = parser.add_subparsers(title="validation choice", dest="subcommand")
 
     val = subparsers.add_parser("valMegaDepth", help="parser for training arguments")
@@ -389,8 +366,8 @@ if __name__ == '__main__':
     print(args)
     
     if 'match' not in args.trainMode : 
-        args.eta = 0
-        print ('\nChoose to not train with matchability, switch eta to 0 for training and validation loss...\n')
+        args.lambda_match = 0
+        print ('\nChoose to not train with matchability, switch lambda_match to 0 for training and validation loss...\n')
         
     
     if args.trainMode == 'flow' : 
@@ -399,11 +376,8 @@ if __name__ == '__main__':
     if args.trainMode == 'flow+match' : 
         print ('Train flow + matchability, train everything together...')
         
-    if args.trainMode == 'match' : 
-        print ('Only Train Flow Module without touching feature + matchability...')
-    
-    if args.trainMode == 'grad-match' : 
-        print ('Train grad loss but without matchability loss...')
+    if args.trainMode == 'grad' : 
+        print ('Only learn to smooth flow without touching feature extractor + matchability net...')
     
     if args.resumePth is not None and 'NEED_TO_UPLOAD_CHECKPOINT' in args.resumePth : 
         print (args.resumePth)

@@ -34,7 +34,7 @@ If our project is helpful for your research, please consider citing :
 
 ## 1. Visual Results
 
-### 1.1. Aligning Artworks (More results can be found in our [project webpage](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
+### 1.1. Aligning Artworks (More results can be found in our [project page](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
 
 <p align="center">
 <table>
@@ -128,6 +128,8 @@ If our project is helpful for your research, please consider citing :
 ## 2. Installation
 
 ### 2.1. Dependencies
+
+Our model can be learnt in a **single GPU GeForce GTX 1080Ti** (12G).
 
 Install Pytorch adapted to your CUDA version : 
 
@@ -259,11 +261,13 @@ We appreciate helps from :
 
 ### 7. Changelog
 
-#### 2020.05.25
+#### 2020.07.20
 
-* Remove useless parts
+* Remove useless parts + rename some functions / parameters to make it compatible with papers + more comments
 
-* Fix bug in YFCC evaluation, see [here]. results in the (paper)[https://arxiv.org/abs/2004.01526] have been updated as well. 
+* Fix bug in YFCC evaluation, see [here](evaluation/evalYFCC/). results in the [paper](https://arxiv.org/abs/2004.01526) have been updated as well. 
+
+* Make a comparison to recent work [GLU-Net](https://arxiv.org/abs/1912.05524), results are updated in the [paper](https://arxiv.org/abs/2004.01526).
 
 <!--* Support [MAGSAC](https://github.com/ducha-aiki/pymagsac) for [YFCC evaluation](evaluation/evalYFCC/).
 -->

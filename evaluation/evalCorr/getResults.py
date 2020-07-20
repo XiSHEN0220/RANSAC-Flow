@@ -56,6 +56,7 @@ def ResizeMinResolution(minSize, I, x, y, strideNet) :
         return I, x, y
 
 ## resize image according to the minsize, at the same time resize the x,y coordinate
+## if it is megadepth dataset, remove the point that are outside the image (errors of 3D points)
 def ResizeMinResolution_megadepth(minSize, I, x, y, strideNet) : 
 
         x = np.array(list(map(float, x.split(';')))).astype(np.float32)
@@ -72,7 +73,8 @@ def ResizeMinResolution_megadepth(minSize, I, x, y, strideNet) :
         x, y = x * ratioW, y * ratioH
         index_valid = (x > 0) * (x < new_w) * (y > 0) * (y < new_h)
         
-        return I, x, y, index_valid                
+        return I, x, y, index_valid         
+               
 def getFlow(pairID, finePath, flowList, coarsePath, maskPath, multiH, th) :
     find = False 
     for flowName in flowList : 
@@ -120,6 +122,8 @@ def getFlow(pairID, finePath, flowList, coarsePath, maskPath, multiH, th) :
     flowGlobal = flow[:1]
     match_binary = match[:1] >= th
     matchGlobal = match[:1]
+    
+    ## aggregate mask
     if multiH : 
         
         for i in range(1, len(match)) : 
@@ -128,9 +132,7 @@ def getFlow(pairID, finePath, flowList, coarsePath, maskPath, multiH, th) :
             match_binary = match_binary + tmp_match 
             tmp_match = tmp_match.expand_as(flowGlobal)
             flowGlobal[tmp_match] = flow.narrow(0, i, 1)[tmp_match]
-            
         
-    
     return flowGlobal, matchGlobal
         
 def getFlow_Coarse(pairID, flowList, finePath, coarsePath) :
