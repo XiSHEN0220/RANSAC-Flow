@@ -1,12 +1,9 @@
 # RANSAC-Flow
-Pytorch implementation of Paper "RANSAC-Flow: generic two-stageimage alignment"
+Pytorch implementation of paper "RANSAC-Flow: generic two-stageimage alignment" (ECCV 2020)
 
-<!---
-[[PDF(TODO)]]() [[Project webpage]]() [[Slides (TODO)]]() [[Demo]](https://www.youtube.com/watch?v=_18x4x4vcSY&feature=youtu.be)
 
--->
+[[PDF]](https://arxiv.org/abs/2004.01526) [[Project page]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/) [[Demo]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/img/demo_ransac_flow.mp4) [[Youtube demo]](https://youtu.be/ltZpqRtuA6A)
 
-[[PDF]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/RANSAC_Flow.pdf) [[Project webpage]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/) [[Demo]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/img/demo_ransac_flow.mp4) [[Demo YouTube]](https://youtu.be/ltZpqRtuA6A)
 
 
 
@@ -18,19 +15,22 @@ If our project is helpful for your research, please consider citing :
 ``` 
 @inproceedings{shen2020ransac,
           title={RANSAC-Flow: generic two-stage image alignment},
-          author={Shen, Xi and Darmon, Francois and Efros, Alexei A and Aubry, Mathieu},
-          booktitle={Arxiv},
+          author={Shen, Xi and Darmon, Fran{\c{c}}oise and Efros, Alexei A and Aubry, Mathieu},
+          booktitle={16th European Conference on Computer Vision}
           year={2020}
         }
 ```
 ## Table of Content
-* [1. Visual Results](#1-visual-results)
-* [2. Installation](#2-installation)
-* [3. Quick Start](#3-quick-start)
+* [1. Visual Results](#visual-results)
+* [2. Installation](#installation)
+* [3. Quick Start](#quick-start)
     * [Notebook of demo](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/quick_start/demo.ipynb)
-* [4. Train](#4-train)
+* [4. Train](#train)
     * [Notebook to generate training pairs](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/train/generate_coarse_aligned_pair.ipynb)
-* [5. Evaluation](#5-evaluation)
+* [5. Evaluation](#Evaluation)
+* [6. Acknowledgement](#acknowledgement)
+* [7. Changelog](#changelog)
+
 
 ## 1. Visual Results
 
@@ -65,7 +65,8 @@ If our project is helpful for your research, please consider citing :
 </table>
 </p>
 
-### 1.2. 3D recontruction 2-view geometry estimation (More results can be found in our [project webpage](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
+### 1.2. 3D recontruction (More results can be found in our [project page](http://imagine.enpc.fr/~shenx/RANSAC-Flow/))
+
 
 <p align="center">
 <table>
@@ -120,7 +121,9 @@ If our project is helpful for your research, please consider citing :
 </table>
 </p>
 
-**Other results (such as: aligning duplicated artworks, optical flow, localization etc.) can be seen in [our paper](http://imagine.enpc.fr/~shenx/RANSAC-Flow/RANSAC_Flow.pdf).**
+<<<<<<< HEAD
+**Other results (such as: aligning duplicated artworks, optical flow, localization etc.) can be seen in [our paper](https://arxiv.org/abs/2004.01526).**
+
  
 ## 2. Installation
 
@@ -135,6 +138,7 @@ Other dependencies (tqdm, visdom, pandas, kornia, opencv-python) :
 ``` Bash
 bash requirement.sh
 ```
+
 
 ### 2.2. Pre-trained models 
 
@@ -240,6 +244,29 @@ The evaluation of different tasks can be seen in the following files:
 
 
 
+
+
+### 6. Acknowledgement
+
+We appreciate helps from :  
+
+* [Jiahui Zhang](https://github.com/zjhthu) pointed a bug for YFCC evaluation, see [here](evaluation/evalYFCC/) for the udpate
+
+* Public code like [Kornia](https://github.com/kornia/kornia), [OAnet](https://github.com/zjhthu/OANet), [NcNet](https://github.com/ignacio-rocco/ncnet), [DGC-Net](https://github.com/AaltoVision/DGC-Net), [MAGSAC](https://github.com/ducha-aiki/pymagsac) etc.
+
+* Part of code is borrowed from our previous projects: [ArtMiner](https://github.com/XiSHEN0220/ArtMiner) and [Watermark](https://github.com/XiSHEN0220/WatermarkReco)
+
+
+### 7. Changelog
+
+#### 2020.05.25
+
+* Remove useless parts
+
+* Fix bug in YFCC evaluation, see [here]. results in the (paper)[https://arxiv.org/abs/2004.01526] have been updated as well. 
+
+<!--* Support [MAGSAC](https://github.com/ducha-aiki/pymagsac) for [YFCC evaluation](evaluation/evalYFCC/).
+-->
 
 
 
