@@ -1,5 +1,5 @@
 # RANSAC-Flow
-Pytorch implementation of paper "RANSAC-Flow: generic two-stageimage alignment" (ECCV 2020)
+Pytorch implementation of paper "RANSAC-Flow: generic two-stage image alignment" (ECCV 2020)
 
 
 [[PDF]](https://arxiv.org/abs/2004.01526) [[Project page]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/) [[Demo]](http://imagine.enpc.fr/~shenx/RANSAC-Flow/img/demo_ransac_flow.mp4) [[Youtube demo]](https://youtu.be/ltZpqRtuA6A)
