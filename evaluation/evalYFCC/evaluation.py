@@ -77,9 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('--maskRegionTh', type=float, default = 0.01, help='if mask region smaller than this value, stop doing homography')
     parser.add_argument('--maxCoarse', type=int, default = 10, help='maximum number of coarse alignment')
 
-    parser.add_argument('--fineIter', type=int, default = 1000, help='nb iteration in RANSAC')
     parser.add_argument('--coarsetolerance', type=float, default = 0.05, help='tolerance coarse in RANSAC')
-    parser.add_argument('--finetolerance', type=float, default = 0.05, help='tolerance fine in RANSAC')
     parser.add_argument('--nbScale', type=int, default=7, choices=[3, 5, 7], help='nb scales ')
     parser.add_argument('--outDir', type=str, help='output directory')
 

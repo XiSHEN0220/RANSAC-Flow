@@ -17,17 +17,6 @@ from sklearn.metrics import pairwise_distances
 import kornia.geometry as tgm
 import json 
 
-def ResizeMinResolution(minSize, I, strideNet): 
-    w, h = I.size
-    ratio = min(w / float(minSize), h / float(minSize)) 
-    new_w, new_h = round(w/ ratio), round(h / ratio) 
-    new_w, new_h = new_w // strideNet * strideNet , new_h // strideNet * strideNet
-    
-    ratioW, ratioH = new_w / float(w), new_h / float(h)
-    I = I.resize((new_w, new_h), resample=Image.LANCZOS)
-    
-    return I
-
 def getResizedSize(minSize, I_size, strideNet):
     w, h = I_size
     ratio = min(w / float(minSize), h / float(minSize)) 
@@ -36,11 +25,6 @@ def getResizedSize(minSize, I_size, strideNet):
         
     return new_w, new_h
 
-## composite image    
-def getMeanImage(Is, It): 
-    Imean = (np.clip(np.array(Is) / 255. * 0.5 + np.array(It) / 255. * 0.5, a_min = 0.0, a_max = 1.0) * 255 ).astype(np.uint8)
-    Imean = Image.fromarray(Imean)
-    return Imean
 
 def norm_kp(org_size, new_size, K,  kp):
     """
@@ -66,9 +50,9 @@ def norm_kp(org_size, new_size, K,  kp):
     return (kp - np.array([[cx, cy]])) / np.array([[fx, fy]])
 
     
-        
-    
 def matches_from_flow(flowFine, matchBinary, sizeA, sizeB, angle):
+    
+    matchBinary = matchBinary.astype('bool')
     
     wA, hA = sizeA
     wB, hB = sizeB
@@ -350,6 +334,7 @@ if __name__ == "__main__":
             
         print ('Scene ', scene, 'Acc@5: ', np.sum(np.array(res[scene]) < 5) / float(len(res[scene])))
         print ('Scene ', scene, 'Acc@10: ', np.sum(np.array(res[scene]) < 10) / float(len(res[scene])))
+        print ('Scene ', scene, 'Acc@15: ', np.sum(np.array(res[scene]) < 15) / float(len(res[scene])))
         print ('Scene ', scene, 'Acc@20: ', np.sum(np.array(res[scene]) < 20) / float(len(res[scene])))
         
 
@@ -358,6 +343,7 @@ if __name__ == "__main__":
         resTotal = resTotal + res[scene]
     print ('Total ', 'Acc@5: ', np.sum(np.array(resTotal) < 5) / float(len(resTotal)))
     print ('Total ', 'Acc@10: ', np.sum(np.array(resTotal) < 10) / float(len(resTotal)))
+    print ('Scene ', scene, 'Acc@15: ', np.sum(np.array(res[scene]) < 15) / float(len(res[scene])))
     print ('Total ', 'Acc@20: ', np.sum(np.array(resTotal) < 20) / float(len(resTotal))) 
 
 

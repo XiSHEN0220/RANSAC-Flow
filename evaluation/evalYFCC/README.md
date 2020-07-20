@@ -47,3 +47,12 @@ python getResults.py --multiH --ransac --coarsePth MOCO_Coarse --finePth MOCO_Fi
 
 Adding `--imageNet` when running `evaluation.py` with the above commands.
 
+
+### Metric
+    
+    According to the implementation of [OANet](https://github.com/zjhthu/OANet), the mAP@20 in the paper is the average over AP < 5, AP < 10, AP < 15, AP < 20; mAP@10 in the paper in the average over standard Acc < 5, Acc < 10. For more details, we refer to this part of code in [OANet](https://github.com/zjhthu/OANet/blob/master/core/test.py#L81). 
+    
+    Running our code will give you the AP < 5, AP < 10, AP < 15, AP < 20 (average over the 4 scenes). Then to compare to the numbers in the paper, one need to compute the average.
+    
+    We thank to [Jiahui Zhang](https://github.com/zjhthu) to point it out. 
+
