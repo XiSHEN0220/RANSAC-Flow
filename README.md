@@ -121,7 +121,7 @@ If our project is helpful for your research, please consider citing :
 </table>
 </p>
 
-<<<<<<< HEAD
+
 **Other results (such as: aligning duplicated artworks, optical flow, localization etc.) can be seen in [our paper](https://arxiv.org/abs/2004.01526).**
 
  
