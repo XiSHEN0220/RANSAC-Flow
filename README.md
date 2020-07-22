@@ -21,15 +21,15 @@ If our project is helpful for your research, please consider citing :
         }
 ```
 ## Table of Content
-* [1. Visual Results](#visual-results)
-* [2. Installation](#installation)
-* [3. Quick Start](#quick-start)
+* [1. Visual Results](#1-visual-results)
+* [2. Installation](#2-installation)
+* [3. Quick Start](#3-quick-start)
     * [Notebook of demo](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/quick_start/demo.ipynb)
-* [4. Train](#train)
+* [4. Train](#4-train)
     * [Notebook to generate training pairs](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/train/generate_coarse_aligned_pair.ipynb)
-* [5. Evaluation](#Evaluation)
-* [6. Acknowledgement](#acknowledgement)
-* [7. Changelog](#changelog)
+* [5. Evaluation](#5-evaluation)
+* [6. Acknowledgement](#6-acknowledgement)
+* [7. Changelog](#7-changelog)
 
 
 ## 1. Visual Results
