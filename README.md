@@ -20,6 +20,11 @@ If our project is helpful for your research, please consider citing :
           year={2020}
         }
 ```
+
+Since some functions have different behaviors in different Pytorch version, we recommand to install **EXACT** version indicated in the [Dependencies](https://github.com/XiSHEN0220/RANSAC-Flow#21-dependencies) if you want to reproduce our results in the paper. For more details, please refer to [this issue](https://github.com/XiSHEN0220/RANSAC-Flow/issues/2). 
+
+
+
 ## Table of Content
 * [1. Visual Results](#1-visual-results)
 * [2. Installation](#2-installation)
