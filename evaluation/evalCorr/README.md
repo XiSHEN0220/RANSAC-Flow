@@ -28,6 +28,9 @@ This evaluation code takes the same structure as MegaDepth, which means you need
 └── test6511.csv
 ```
 
+The cvs file can be downloaded from [here(~5G)](https://drive.google.com/file/d/16mZLUKsjceAt1RTW1KLckX0uCR3O4x5Q/view?usp=sharing).
+
+
 ### MOCO feature 
 
 #### MegaDepth, W/O Fine-tuning

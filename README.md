@@ -274,6 +274,8 @@ We appreciate helps from :
 
 * Make a comparison to recent work [GLU-Net](https://arxiv.org/abs/1912.05524), results are updated in the [paper](https://arxiv.org/abs/2004.01526).
 
+* Add csv file containing annotated coorespondences for RobotCar, see [here](https://github.com/XiSHEN0220/RANSAC-Flow/tree/master/evaluation/evalCorr) for more details.
+
 <!--* Support [MAGSAC](https://github.com/ducha-aiki/pymagsac) for [YFCC evaluation](evaluation/evalYFCC/).
 -->
 
