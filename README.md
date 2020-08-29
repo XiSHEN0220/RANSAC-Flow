@@ -15,7 +15,7 @@ If our project is helpful for your research, please consider citing :
 ``` 
 @inproceedings{shen2020ransac,
           title={RANSAC-Flow: generic two-stage image alignment},
-          author={Shen, Xi and Darmon, Fran{\c{c}}oise and Efros, Alexei A and Aubry, Mathieu},
+          author={Shen, Xi and Darmon, Fran{\c{c}}ois and Efros, Alexei A and Aubry, Mathieu},
           booktitle={16th European Conference on Computer Vision}
           year={2020}
         }
