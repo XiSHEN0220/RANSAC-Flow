@@ -236,6 +236,9 @@ print ('-->  ', pixelGrid, '\n')
 nbImg = len(df)
 flowList = os.listdir(args.finePth)
 
+if args.maskPth is None : 
+    args.maskPth = args.finePth
+    
 for i in tqdm(range(nbImg)) : 
         
     scene = df['scene'][i]

@@ -44,7 +44,7 @@ python evaluation.py --outDir MOCO_MegaDepth_WO_FT MegaDepth
 To get results with our **fine alignment** : 
 
 ``` Bash
-python getResults.py --coarsePth MOCO_MegaDepth_WO_FT_Coarse --finePth MOCO_MegaDepth_WO_FT_Fine --dataset MegaDepth --multhH MegaDepth
+python getResults.py --coarsePth MOCO_MegaDepth_WO_FT_Coarse --finePth MOCO_MegaDepth_WO_FT_Fine --dataset MegaDepth --multiH MegaDepth
 ```
 
 #### MegaDepth, W Fine-tuning
@@ -58,7 +58,7 @@ python evaluation.py --outDir MOCO_MegaDepth_FT --resumePth ../../model/pretrain
 To get results with our **fine alignment** : 
 
 ``` Bash
-python getResults.py --coarsePth MOCO_MegaDepth_FT_Coarse --finePth MOCO_MegaDepth_FT_Fine --dataset MegaDepth --multhH MegaDepth
+python getResults.py --coarsePth MOCO_MegaDepth_FT_Coarse --finePth MOCO_MegaDepth_FT_Fine --dataset MegaDepth --multiH MegaDepth
 ```
 
 
@@ -73,7 +73,7 @@ python evaluation.py --outDir MOCO_RobotCar_WO_FT RobotCar
 To get results with our **fine alignment** : 
 
 ``` Bash
-python getResults.py --coarsePth MOCO_RobotCar_WO_FT_Coarse --finePth MOCO_RobotCar_WO_FT_Fine --multhH --dataset RobotCar RobotCar
+python getResults.py --coarsePth MOCO_RobotCar_WO_FT_Coarse --finePth MOCO_RobotCar_WO_FT_Fine --multiH --dataset RobotCar RobotCar
 ```
 
 #### RobotCar, With Fine-tuning
@@ -86,7 +86,7 @@ python evaluation.py --outDir MOCO_RobotCar_FT --resumePth ../../model/pretraine
 To get results with our **fine alignment** : 
 
 ``` Bash 
-python getResults.py --coarsePth MOCO_RobotCar_FT_Coarse --finePth MOCO_RobotCar_FT_Fine --multhH --dataset RobotCar RobotCar
+python getResults.py --coarsePth MOCO_RobotCar_FT_Coarse --finePth MOCO_RobotCar_FT_Fine --multiH --dataset RobotCar RobotCar
 ```
 
 
