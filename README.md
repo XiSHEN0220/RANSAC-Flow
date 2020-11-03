@@ -276,6 +276,9 @@ We appreciate helps from :
 
 * Add csv file containing annotated coorespondences for RobotCar, see [here](https://github.com/XiSHEN0220/RANSAC-Flow/tree/master/evaluation/evalCorr) for more details.
 
+#### 2020.11.03
+
+* Update results on Aachan day-night dataset, see [here](evaluation/evalAachan)
 <!--* Support [MAGSAC](https://github.com/ducha-aiki/pymagsac) for [YFCC evaluation](evaluation/evalYFCC/).
 -->
 
