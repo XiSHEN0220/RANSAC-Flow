@@ -46,12 +46,31 @@ def mutualMatching(featA, featB) :
     
         
 def Affine(X, Y):
-    H21 = np.linalg.lstsq(Y, X[:, :2])[0]
-    H21 = H21.T
-    H21 = np.array([[H21[0, 0], H21[0, 1], H21[0, 2]], 
-                    [H21[1, 0], H21[1, 1], H21[1, 2]],
-                    [0, 0, 1]])
-    
+    N = X.shape[0]
+    device = X.device
+    A = np.zeros((N, 6, 7))
+    for i in range(3):
+        u, v, u_, v_ = Y[:, i, 0].cpu().numpy(), Y[:, i, 1].cpu().numpy(),\
+                       X[:, i, 0].cpu().numpy(), X[:, i, 1].cpu().numpy()
+        A[:, 2 * i] = np.stack([
+            np.zeros(N), np.zeros(N), np.zeros(N),
+            -u, -v, -np.ones(N), v_
+        ], axis=1)
+        A[:, 2 * i + 1] = np.stack([
+            u, v, np.ones(N), np.zeros(N), np.zeros(N),
+            np.zeros(N), -u_
+        ], axis=1)
+
+    # svd composition
+    u, s, v = np.linalg.svd(A)
+    # reshape the min singular value into a 2 by 3 matrix
+    v = v[:, -1]  # smallest eigenvalue
+    H21 = np.zeros((N, 3, 3))
+    H21[:, :2, :] = np.reshape(v[:, :-1], (N, 2, 3))
+    for i in range(N):
+        H21[i] /= v[i, -1]
+    H21[:, -1, -1] = 1
+    H21 = torch.tensor(H21, device=device).float().cuda()
     return H21
 
 def Hough(X, Y) : 
@@ -80,7 +99,7 @@ def Homography(X, Y):
             np.zeros(N), -u_ * u, -u_ * v, -u_
         ], axis=1)
 
-    #svd compositionq
+    #svd composition
     u, s, v = np.linalg.svd(A)
     #reshape the min singular value into a 3 by 3 matrix
     H21 = torch.tensor(np.reshape(v[:, 8], (N, 3, 3))).float().cuda()
@@ -119,15 +138,21 @@ def RANSAC(nbIter, match1, match2, tolerance, nbPoint, Transform) :
     
     samples = torch.randint(nbMatch, (nbIter, nbPoint), device=match1.device)
 
-    # HARDCODED FOR HOMOGRPAHIES FOR NOW
-    conditions = torch.stack([
-        samples[:, 0] == samples[:, 1],
-        samples[:, 0] == samples[:, 2],
-        samples[:, 0] == samples[:, 3],
-        samples[:, 1] == samples[:, 2],
-        samples[:, 1] == samples[:, 3],
-        samples[:, 2] == samples[:, 3]
-    ], dim=1)  # N * nb_cond
+    if nbPoint == 4:
+        conditions = torch.stack([
+            samples[:, 0] == samples[:, 1],
+            samples[:, 0] == samples[:, 2],
+            samples[:, 0] == samples[:, 3],
+            samples[:, 1] == samples[:, 2],
+            samples[:, 1] == samples[:, 3],
+            samples[:, 2] == samples[:, 3]
+        ], dim=1)  # N * nb_cond
+    elif nbPoint == 3:
+        conditions = torch.stack([
+            samples[:, 0] == samples[:, 1],
+            samples[:, 0] == samples[:, 2],
+            samples[:, 1] == samples[:, 2],
+        ], dim=1)  # N * nb_cond
 
     duplicated_samples = torch.any(conditions, dim=1)
     unique_samples = samples[~duplicated_samples] # N * nbPoint
