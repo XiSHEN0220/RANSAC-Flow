@@ -1,3 +1,4 @@
+pip install torchvision==0.4.0
 pip install tqdm
 pip install pandas
 pip install kornia==0.1.4.post2

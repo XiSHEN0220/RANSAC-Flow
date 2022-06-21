@@ -132,6 +132,12 @@ Since some functions have different behaviors in different Pytorch version, we r
  
 ## 2. Installation
 
+### 2.0 Docker (If you use this, you can skip 2.1~ procedure)
+install docker compose v2 from [here](https://github.com/docker/compose)
+```Bash
+docker compose up
+```
+
 ### 2.1. Dependencies
 
 Our model can be learnt in a **single GPU GeForce GTX 1080Ti** (12G).
