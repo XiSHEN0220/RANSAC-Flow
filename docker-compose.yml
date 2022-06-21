@@ -9,6 +9,10 @@ services:
       - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./:/app
+    ports:
+      - 8888:8888
+    tty: true
     network_mode: host
     deploy:
       resources:
