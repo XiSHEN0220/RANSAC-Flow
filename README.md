@@ -135,7 +135,8 @@ Since some functions have different behaviors in different Pytorch version, we r
 ### 2.0 Docker (If you use this, you can skip 2.1~ procedure)
 install docker compose v2 from [here](https://github.com/docker/compose)
 ```Bash
-docker compose up
+docker compose build
+docker compose run app bash
 ```
 
 ### 2.1. Dependencies
