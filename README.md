@@ -138,6 +138,12 @@ install docker compose v2 from [here](https://github.com/docker/compose)
 docker compose build
 docker compose run app bash
 ```
+You can run 3. Quick Start part by running below command inside the docker.
+```Bash
+cd quick_start
+./runjupyter_fromdocker.sh
+```
+Then open "localhost:8888" in your host browser.
 
 ### 2.1. Dependencies
 
