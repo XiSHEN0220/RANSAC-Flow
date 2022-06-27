@@ -132,13 +132,14 @@ Since some functions have different behaviors in different Pytorch version, we r
  
 ## 2. Installation
 
-### 2.0 Docker (If you use this, you can skip 2.1~ procedure)
-install docker compose v2 from [here](https://github.com/docker/compose)
+### 2.1-a Docker (If you use this, you can skip 2.1-b procedure)
+install docker compose v2 from [here](https://github.com/docker/compose). Then, run below:
 ```Bash
 docker compose build
 docker compose run app bash
 ```
-You can run 3. Quick Start part by running below command inside the docker.
+
+After running 2.1,2.2, you can run "3. Quick Start" part by running below command inside the docker.
 ```Bash
 cd quick_start
 ./runjupyter_fromdocker.sh
@@ -165,8 +166,7 @@ bash requirement.sh
 Quick download : 
 
 ``` Bash
-cd model/pretrained
-bash download_model.sh
+./model/pretrained/download_model.sh
 ```
 
 For more details of the pre-trained models, see [here](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/model/pretrained) 
@@ -177,8 +177,7 @@ For more details of the pre-trained models, see [here](https://github.com/XiSHEN
 Download the results of [ArtMiner](http://imagine.enpc.fr/~shenx/ArtMiner/) : 
 
 ``` Bash
-cd data/
-bash Brueghel_detail.sh # Brueghel detail dataset (208M) : visual results, aligning groups of details
+./data/Brueghel_detail.sh # Brueghel detail dataset (208M) : visual results, aligning groups of details
 ```
 
 Download our training data [here (~9G)](https://drive.google.com/file/d/1SikcOvCJ-zznOyCRJCTGtpKtTp01Jx5g/view?usp=sharing). It includes the validation and test data as well.
