@@ -1,9 +1,9 @@
 services:
-  cuda10app:
-    image: ransacflow:latest
+  app:
+    image: ransacflow:${CUDA_VERSION:-latest}
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile${CUDA_VERSION:+_}${CUDA_VERSION:-}
     environment:
       - DISPLAY=${DISPLAY}
       - NVIDIA_VISIBLE_DEVICES=all
@@ -20,24 +20,3 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
-  cuda11app:
-    image: ransacflow:cuda11
-    build:
-      context: .
-      dockerfile: Dockerfile_cuda11
-    environment:
-      - DISPLAY=${DISPLAY}
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./:/app
-    ports:
-      - 8888:8888
-    tty: true
-    network_mode: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]	 

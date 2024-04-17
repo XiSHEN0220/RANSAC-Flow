@@ -1,0 +1,12 @@
+torchvision
+tqdm
+pandas
+kornia == 0.1.4.post2
+opencv-python == 3.4.8.29
+scipy
+# to avoid "cannot import name 'TypeVarTuple' from 'typing_extensions'" error, install below.
+ipykernel
+jupyterlab
+# to avoid "FloatProgress not found. Please update jupyter and ipywidgets" error, install below
+ipywidgets
+matplotlib

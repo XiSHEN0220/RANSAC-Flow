@@ -19,7 +19,6 @@ if not sys.warnoptions:
 sys.path.append('../utils/')
 import outil
 
-from scipy.misc import imresize
 from scipy import signal
 ## resize image according to the minsize, at the same time resize the x,y coordinate
 

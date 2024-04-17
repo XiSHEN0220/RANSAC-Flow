@@ -132,22 +132,33 @@ Since some functions have different behaviors in different Pytorch version, we r
  
 ## 2. Installation
 
-### 2.1-a Docker (If you use this, you can skip 2.1-b procedure)
-run below:
+### a. Docker
+#### 2.a.1. set environment variable
+If you have old nvidia GPU which have compute capability < 8.0, 
+set environment variable as;
+```bash
+export CUDA_VERSION=10
+```
+Otherwise, you don't need to do anything.
+
+#### 2.a.2
+Run below:
 ```Bash
 ./script/install_configure_nvidia_container_toolkit.sh
 docker compose build
 docker compose run app bash
 ```
 
-After running 2.2,2.3, you can run "3. Quick Start" part by running below command inside the docker.
+#### 2.a.3 run ransac flow
+run "3. Quick Start" part by running below command inside the docker.
 ```Bash
 cd quick_start
 ./runjupyter_fromdocker.sh
 ```
 Then open "localhost:8888" in your host browser.
 
-### 2.1-b. Dependencies
+### b. without docker
+### 2.1. Dependencies
 
 Our model can be learnt in a **single GPU GeForce GTX 1080Ti** (12G).
 
@@ -158,7 +169,7 @@ Install Pytorch adapted to your CUDA version :
 
 Other dependencies (tqdm, visdom, pandas, kornia, opencv-python) : 
 ``` Bash
-bash requirement.sh
+pip install -r requirements.txt
 ```
 
 
