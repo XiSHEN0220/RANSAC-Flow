@@ -22,7 +22,12 @@ if not sys.warnoptions:
     warnings.simplefilter("ignore")
 import matplotlib.pyplot as plt 
 
-def align2imgs(args):
+def get_Avg_Image(Is, It) : 
+    Is_arr, It_arr = np.array(Is) , np.array(It)
+    Imean = Is_arr * 0.5 + It_arr * 0.5
+    return Image.fromarray(Imean.astype(np.uint8))
+
+def align2images(args):
     # Load input images
     img1 = Image.open(args.img1).convert('RGB')
     img2 = Image.open(args.img2).convert('RGB')
@@ -79,16 +84,23 @@ def align2imgs(args):
 
     # save for debug
     plt.figure(figsize=(20, 10))
-    plt.subplot(1, 2, 1)
+    plt.subplot(1, 3, 1)
+    plt.imshow(img1_coarse_pil)
     plt.axis('off')
     plt.title('Source Image (Coarse)')
-    plt.imshow(img1_coarse_pil)
-    plt.subplot(1, 2, 2)
+    plt.subplot(1, 3, 2)
+    plt.imshow(img2)
     plt.axis('off')
     plt.title('Target Image')
-    plt.imshow(img2)
+    plt.subplot(1, 3, 3)
+    plt.imshow(get_Avg_Image(img1_coarse_pil, coarseModel.It))
+    plt.axis('off')
+    plt.title('Coarse Alignment')
     plt.show()
     plt.savefig(args.outdir + 'coarse_alignment.png')
+
+    # fine alignment
+
 
 if __name__ == '__main__':
     # get arguments with default values.
@@ -107,4 +119,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    align2imgs(args)
+    align2images(args)
