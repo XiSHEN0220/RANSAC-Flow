@@ -69,11 +69,9 @@ def align2images(args):
     coarseModel.setSource(img1)
     coarseModel.setTarget(img2)
     img2w, img2h = coarseModel.It.size # It: image target.
-    feat_tensor = F.normalize(network['netFeatCoarse'](coarseModel.ItTensor))
     # grid
     gridX = torch.linspace(-1, 1, steps = img2w).view(1, 1, -1, 1).expand(1, img2h, img2w, 1)
     gridY = torch.linspace(-1, 1, steps = img2h).view(1, -1, 1, 1).expand(1, img2h, img2w, 1)
-    grid = torch.cat((gridX, gridY), dim = 3).cuda()
     warper = tgm.HomographyWarper(img2h, img2w)
     # compute best parameters
     bestPrm, inlierMask = coarseModel.getCoarse(np.zeros((img2h, img2w)))
@@ -100,6 +98,34 @@ def align2images(args):
     plt.savefig(args.outdir + 'coarse_alignment.png')
 
     # fine alignment
+    feat1 = F.normalize(network['netFeatCoarse'](img1_coarse.cuda()))
+    feat2 = F.normalize(network['netFeatCoarse'](coarseModel.ItTensor))
+    corr12 = network['netCorr'](feat1, feat2)
+    flowDown = network['netFlowCoarse'](corr12, False)
+    grid = torch.cat((gridX, gridY), dim = 3).cuda()
+    flowUp = F.interpolate(flowDown, size = (grid.size()[1], grid.size()[2]), mode = 'bilinear')
+    flowUp = flowUp.permute(0, 2, 3, 1)
+    flowUp = flowUp + grid
+    flow12 = F.grid_sample(flowCoarse.permute(0, 3, 1, 2), flowUp).permute(0, 2, 3, 1).contiguous()
+
+    img1_fine = F.grid_sample(coarseModel.IsTensor, flow12)
+    img1_fine_pil = transforms.ToPILImage()(img1_fine.cpu().squeeze())
+
+    # save for debug
+    plt.subplot(1, 3, 1)
+    plt.axis('off')
+    plt.title('Source Image (Fine Alignment)')
+    plt.imshow(img1_fine_pil)
+    plt.subplot(1, 3, 2)
+    plt.axis('off')
+    plt.title('Target Image')
+    plt.imshow(img2)
+    plt.subplot(1, 3, 3)
+    plt.axis('off')
+    plt.title('Overlapped Image')
+    plt.imshow(get_Avg_Image(img1_fine_pil, coarseModel.It))
+    plt.show()
+    plt.savefig(args.outdir + 'fine_alignment.png')
 
 
 if __name__ == '__main__':
