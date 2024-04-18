@@ -32,20 +32,6 @@ def align2images(args):
     img1 = Image.open(args.img1).convert('RGB')
     img2 = Image.open(args.img2).convert('RGB')
 
-    # save for debug
-    plt.figure(figsize=(20, 10))
-    plt.subplot(1, 2, 1)
-    plt.imshow(img1)
-    plt.axis('off')
-    plt.title('Source Image')
-    plt.subplot(1, 2, 2)
-    plt.imshow(img2)
-    plt.axis('off')
-    plt.title('Target Image')
-    plt.title('input imagees')
-    plt.show()
-    plt.savefig(args.outdir + 'input_images.png')
-
     # Load the model
     Transform = outil.Homography
     network = {'netFeatCoarse' : model.FeatureExtractor(), 
@@ -95,7 +81,7 @@ def align2images(args):
     plt.axis('off')
     plt.title('Coarse Alignment')
     plt.show()
-    plt.savefig(args.outdir + 'coarse_alignment.png')
+    plt.savefig(args.outdir + 'comb_coarse_alignment.png')
 
     # fine alignment
     feat1 = F.normalize(network['netFeatCoarse'](img1_coarse.cuda()))
@@ -125,7 +111,11 @@ def align2images(args):
     plt.title('Overlapped Image')
     plt.imshow(get_Avg_Image(img1_fine_pil, coarseModel.It))
     plt.show()
-    plt.savefig(args.outdir + 'fine_alignment.png')
+    plt.savefig(args.outdir + 'comb_fine_alignment.png')
+
+    # save aligned source image
+    img1_fine_pil.save(args.outdir + 'fine_aligned_source.png')
+    coarseModel.It.save(args.outdir + 'resized_target.png')
 
 
 if __name__ == '__main__':
