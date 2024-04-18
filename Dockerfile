@@ -1,13 +1,17 @@
-FROM pytorch/pytorch:1.2-cuda10.0-cudnn7-runtime
-
+# for cuda compute capability >= 8 GPU.
+FROM pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
 WORKDIR /app
 COPY . .
 
+# tzdata to avoid stopping at being asked Geographic area during libopencv-dev installation
+RUN apt-get update && \
+    apt-get install -y tzdata wget unzip
 # to avoid the error "libgthread-2.0.so.0: cannot open", we need opencv itself.
-RUN apt-get update && apt-get install -y libopencv-dev
-RUN apt-get install -y wget
-RUN bash requirement.sh
+RUN apt-get install -y libopencv-dev
+
+RUN pip install -r requirements.txt
+
 RUN cd /app/model/pretrained && \
     bash download_model.sh
 RUN cd /app/data && \
-    bash Brueghel_detail.sh # Brueghel detail dataset (208M) : visual results, aligning groups of details
+    bash Brueghel_detail.sh
