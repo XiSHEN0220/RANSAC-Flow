@@ -134,19 +134,19 @@ Since some functions have different behaviors in different Pytorch version, we r
 
 ### a. Docker
 #### 2.a.1. set environment variable
-If you have old nvidia GPU which have compute capability < 8.0, 
-set environment variable as;
+If you have old nvidia GPU which has the compute capability < 8.0, 
+set an environment variable as;
 ```bash
 export CUDA_VERSION=10
 ```
 Otherwise, you don't need to do anything.
 
-#### 2.a.2
-Run below:
+#### 2.a.2 run docker
+Install Nvidia driver and run below:
 ```Bash
 ./script/install_configure_nvidia_container_toolkit.sh
 docker compose build
-docker compose run app bash
+docker compose run --rm app bash
 ```
 
 #### 2.a.3 run ransac flow
@@ -169,7 +169,7 @@ Install Pytorch adapted to your CUDA version :
 
 Other dependencies (tqdm, visdom, pandas, kornia, opencv-python) : 
 ``` Bash
-pip install -r requirements.txt
+pip install -r requirements_cuda10.txt
 ```
 
 
