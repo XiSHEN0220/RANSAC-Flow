@@ -10,3 +10,8 @@ RUN apt-get update && \
 RUN apt-get install -y libopencv-dev
 
 RUN pip install -r requirements.txt
+
+RUN cd /app/model/pretrained && \
+    bash download_model.sh
+RUN cd /app/data && \
+    bash Brueghel_detail.sh
