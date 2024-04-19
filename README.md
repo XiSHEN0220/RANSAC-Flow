@@ -156,6 +156,7 @@ cd quick_start
 ./runjupyter_fromdocker.sh
 ```
 Then open "localhost:8888" in your host browser.
+You can also run on your own image by 3.2 way.
 
 ### b. without docker
 ### 2.1. Dependencies
@@ -196,12 +197,20 @@ Download our training data [here (~9G)](https://drive.google.com/file/d/1SikcOvC
 
 ## 3. Quick Start
 
+### 3.1 ipython notebook
 A quick start guide of how to use our code is available in [demo.ipynb](https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/quick_start/demo.ipynb)
 
 <p align="center">
 <a href="https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/quick_start/demo.ipynb"><img src="https://github.com/XiSHEN0220/RANSAC-Flow/blob/master/img/notebook.png" width="400px" alt="notebook"></a>
 </p>
 
+### 3.2 Run on your own 2 images
+You can run RANSAC-FLOW as below
+```bash
+cd quick_start
+python align2images.py --img1='../img/ArtMiner_Detail_Res13_10.png' --img2='../img/ArtMiner_Detail_Res13_11.png'
+```
+Then, you can find the output images in output/ directory.
 
 ## 4. Train
 
@@ -289,6 +298,10 @@ We appreciate helps from :
 
 
 ### 7. Changelog
+
+#### 2024.04.18
+* add Nvidia GPU compute capability >= 8 support.
+* add inference script to run on your own image. 
 
 #### 2020.07.20
 
